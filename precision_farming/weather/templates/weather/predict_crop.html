@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Crop Prediction Dashboard</title>
+</head>
+<style>
+  @import url(https://fonts.googleapis.com/css?family=Montserrat);
+  @import url(https://fonts.googleapis.com/css?family=Advent+Pro:400,200);
+
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  .list-type1 {
+    width: 400px;
+    margin: 0 auto;
+  }
+
+  /* .list-type1 ol{
+counter-reset: li;
+list-style: none;
+*list-style: decimal;
+font-size: 15px;
+font-family: 'Raleway', sans-serif;
+padding: 0;
+margin-bottom: 4em;
+}
+.list-type1 ol ol{
+margin: 0 0 0 2em;
+} */
+  ol {
+    background: #a4ebf3;
+    padding: 20px;
+  }
+
+  ul {
+    background: #1687a7;
+    padding: 10px;
+  }
+
+  .list-type1 a {
+    position: relative;
+    display: block;
+    padding: .4em .4em .4em 2em;
+    *padding: .4em;
+    margin: .5em 0;
+    background: #93C775;
+    color: #000;
+    text-decoration: none;
+    -moz-border-radius: .3em;
+    -webkit-border-radius: .3em;
+    border-radius: 10em;
+    transition: all .2s ease-in-out;
+  }
+
+  .list-type1 a:hover {
+    background: #d6d4d4;
+    text-decoration: none;
+    transform: scale(1.1);
+  }
+
+  .list-type1 a:before {
+    content: counter(li);
+    counter-increment: li;
+    position: absolute;
+    left: -1.3em;
+    top: 50%;
+    margin-top: -1.3em;
+    background: #93C775;
+    height: 2em;
+    width: 2em;
+    line-height: 2em;
+    border: .3em solid #fff;
+    text-align: center;
+    font-weight: bold;
+    -moz-border-radius: 2em;
+    -webkit-border-radius: 2em;
+    border-radius: 2em;
+    color: #FFF;
+
+  }
+
+  body {
+    background: #00303f;
+    font-family: Montserrat, Arial, sans-serif;
+  }
+
+  h2 {
+    font-size: 14px;
+  }
+
+  .widget {
+    box-shadow: 0 40px 10px 5px rgba(0, 0, 0, 0.4);
+    margin: 100px auto;
+    height: 330px;
+    position: relative;
+    width: 80%;
+  }
+
+  .upper {
+    border-radius: 40px 40px 0 0;
+    background: #ccf2f4;
+    height: 220px;
+    padding: 20px;
+  }
+
+  .date {
+    font-size: 40px;
+  }
+
+  .year {
+    font-size: 20px;
+    color: #00303f;
+  }
+
+  .year2 {
+    font-size: 20px;
+    color: #00303f;
+  }
+
+  .place {
+    color: #00303f;
+    font-size: 50px;
+  }
+
+  .place2 {
+    color: #a4ebf3;
+    font-size: 50px;
+  }
+
+  .lower {
+    background: #1687a7;
+    border-radius: 0 0 5px 5px;
+    font-family: 'Advent Pro';
+    font-weight: 200;
+    height: 130px;
+    width: 100%;
+  }
+
+  .clock {
+    background: #1687a7;
+    border-radius: 100%;
+    box-shadow: 0 0 0 15px #f6f5f5, 0 10px 10px 5px rgba(0, 0, 0, 0.3);
+    height: 150px;
+    position: absolute;
+    right: 25px;
+    top: -35px;
+    width: 150px;
+  }
+
+  .hour {
+    background: #f6f5f5;
+    height: 50px;
+    left: 50%;
+    position: absolute;
+    top: 25px;
+    width: 4px;
+  }
+
+  .min {
+    background: #f6f5f5;
+    height: 65px;
+    left: 50%;
+    position: absolute;
+    top: 10px;
+    transform: rotate(100deg);
+    width: 4px;
+  }
+
+  .min,
+  .hour {
+    border-radius: 5px;
+    transform-origin: bottom center;
+    transition: all .5s linear;
+  }
+
+  .infos {
+    list-style: none;
+  }
+
+  .info {
+    color: #fff;
+    float: left;
+    height: 100%;
+    padding-top: 10px;
+    text-align: center;
+    width: 25%;
+  }
+
+  .info span {
+    display: inline-block;
+    font-size: 28px;
+    margin-top: 20px;
+  }
+
+  .weather p {
+    font-size: 20px;
+    padding: 10px 0;
+  }
+
+  .anim {
+    animation: fade .8s linear;
+  }
+
+  @keyframes fade {
+    0% {
+      opacity: 0;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+
+  a {
+    text-align: center;
+    text-decoration: none;
+    color: #0f3057;
+    font-size: 25px;
+    font-weight: 500;
+  }
+
+  .date {
+    font-size: 28px;
+  }
+</style>
+
+<body>
+
+
+  <div class="widget">
+    <div class="clock">
+      <div class="min" id="min"></div>
+      <div class="hour" id="hour"></div>
+    </div>
+    <div class="upper">
+      <div class="date" id="date">21 March</div>
+      <br>
+      <br>
+      <br>
+      <div class="year">Predicted Crop is </div>
+      <div class="place update" id="crop">{{R}}</div>
+      <div class="year2">{{A}}% Accuracy</div>
+    </div>
+
+    <div>
+      <h1 class="place2">Fertilizers</h1>
+      <ol>
+        <li><a href="#">{{f1}}</a></li>
+        <li><a href="#">{{f2}}</a></li>
+        <li><a href="#">{{f3}}</a></li>
+        <li><a href="#">{{f4}}</a></li>
+        <li><a href="#">{{f5}}</a></li>
+        <br>
+        <div class="req">
+          <h2 style="text-align: center; color: #0f3057; font-size: 15px;">Nitrogen, Phosphorous, Sulphur ---
+            500kg/hectare<br>
+            other ----- 40-50Kg/hectare</h2>
+        </div>
+      </ol>
+    </div>
+    <div style="text-align: center; background:#1687a7; color: #f6f5f5;">Last Update {{D}}</div>
+    <div class="lower">
+      <ul class="infos">
+        <li class="info temp">
+          <h2 class="title">TEMPERATURE</h2>
+          <span class='update' id="temp">{{T}}&deg;C</span>
+        </li>
+        <li class="info weather">
+          <h2 class="title">PRESSURE</h2>
+          <span class="update" id="pressure">{{H}} mb</span>
+        </li>
+        <li class="info wind">
+          <h2 class="title">SOIL MOISTURE</h2>
+          <span class='update' id="Soil Moisture">{{S}}%</span>
+        </li>
+        <li class="info humidity">
+          <h2 class="title">HUMIDITY</h2>
+          <span class='update' id="humidity">{{P}} %</span>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+  <script>
+    setInterval(drawClock, 2000);
+
+    function drawClock() {
+      var now = new Date();
+      var hour = now.getHours();
+      var minute = now.getMinutes();
+      var second = now.getSeconds();
+
+      //Date
+      var options = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      };
+      var today = new Date();
+      document.getElementById("date").innerHTML = today.toLocaleDateString("en-US", options);
+
+      //hour
+      var hourAngle = (360 * (hour / 12)) + ((360 / 12) * (minute / 60));
+      var minAngle = 360 * (minute / 60);
+      document.getElementById("hour").style.transform = "rotate(" + (hourAngle) + "deg)";
+      //minute
+      document.getElementById("min").style.transform = "rotate(" + (minAngle) + "deg)";
+
+      //Get Humidity Temperature and Rain Data
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          var txt = this.responseText;
+          var obj = JSON.parse(txt); //Ref: https://www.w3schools.com/js/js_json_parse.asp
+          document.getElementById("rain").innerHTML = obj.Rain + "%";
+          document.getElementById("temperature").innerHTML = Math.round(obj.Temperature) + "&deg;C";
+          document.getElementById("temp").innerHTML = Math.round(obj.Temperature) + "&deg;C";
+          document.getElementById("humidity").innerHTML = Math.round(obj.Humidity) + "%";
+          document.getElementById("pressure").innerHTML = Math.round(obj.Pressuremb) + " mb";
+        }
+      };
+    }
+  </script>
+
+</body>
+
+</html>
