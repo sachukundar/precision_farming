@@ -18,6 +18,7 @@ from datetime import datetime
 from django.template import loader
 import csv
 import sys
+
 @api_view(["POST"])
 @parser_classes([JSONParser])
 def api(request):
@@ -30,6 +31,17 @@ def api(request):
         # a.Pressure=d['SMS']
         now = datetime.now()
         dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+        hour=int(dt_string[14:16])+329
+        minute=hour%60
+        hour=hour//60
+        newminute=minute
+        newhour=int(dt_string[11:13])+hour
+        # print(newhour,newminute)
+        if(newhour>24):
+            newhour=newhour-24
+        dt_string=str(dt_string[:14])+str(newminute)+str(dt_string[16:])
+        dt_string=str(dt_string[:11])+str(newhour)+str(dt_string[13:])
+        # print(dt_string)
         a = Values(title="value",Temperature=d['Temperature'],Humidity=d['Pressure'],Pressure=d['Humidity'],SMS=d['SMS'],Date_Time=dt_string)
         a.save()
         print(d['Temperature'])
@@ -81,7 +93,7 @@ def crop_report(request):
     #     "<html><body><br>The Accuracy is:</body></html>"+str(a)
     # return HttpResponse(html)
 
-    csv_file = csv.reader(open('precision_farming\cpdata.csv', "r"), delimiter=",")
+    csv_file = csv.reader(open('/home/sachinkundar/precision_farming/precision_farming/cpdata.csv', "r"), delimiter=",")
     for row in csv_file:
         #if current rows 2nd value is equal to input, print that row
         if r == row[4]:
